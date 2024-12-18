@@ -21,7 +21,7 @@
         http_response_code(400);
         echo json_encode([
             "status" => "error",
-            "message" => "Missing username or password.",
+            "message" => "請輸入帳號以及密碼！",
         ]);
         exit;
     }
@@ -51,14 +51,14 @@
             http_response_code(401);
             echo json_encode([
                 "status" => "error",
-                "message" => "Wrong password.",
+                "message" => "密碼錯誤！",
             ]);
         }
     } else {
         http_response_code(404);
         echo json_encode([
             "status" => "error",
-            "message" => "User does not exist.",
+            "message" => "帳號不存在！",
         ]);
     }
 ?>

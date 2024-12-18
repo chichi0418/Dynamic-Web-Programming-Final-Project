@@ -19,7 +19,7 @@
         http_response_code(400);
         echo json_encode([
             "status" => "error",
-            "message" => "Missing username or password.",
+            "message" => "請輸入帳號以及密碼！",
         ]);
         exit;
     }
@@ -39,7 +39,7 @@
         http_response_code(409);
         echo json_encode([
             "status" => "error",
-            "message" => "Username already exists.",
+            "message" => "該帳號已存在，請輸入新的帳號！",
         ]);
     } else {
         $hased_password = password_hash($password, PASSWORD_DEFAULT);
@@ -52,13 +52,12 @@
             http_response_code(201);
             echo json_encode([
                 "status" => "success",
-                "message" => "Register successfully.",
             ]);
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode([
                 "status" => "error",
-                "message" => $e->getMessage(),
+                "message" => "註冊失敗，請再試一次！",
             ]);
             exit;
         }

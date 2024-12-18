@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用戶登入</title>
+    <title>註冊</title>
     <style>
         * {
             margin: 0;
@@ -100,13 +100,10 @@
             position: absolute;
             right: 10px;
             top: 50%;
-            transform: translateY(-50%);
             font-size: 18px;
             color: #ccc;
             cursor: pointer;
         }
-
-        
 
         /* Buttons */
         .btn {
@@ -119,55 +116,71 @@
             text-decoration: none;
             margin-bottom: 10px;
         }
-
+        
         .signup-btn {
-            background-color: #ccc;
+            background-color: #ff7f88;
             color: white;
             border: none;
-            cursor: not-allowed;
+            /* cursor: not-allowed; */
         }
 
-        
+        .signup-btn:hover {
+            background-color: #e16f77;
+        }
+
+        .divider {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .login-btn {
+            background-color: #ffcc33;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .login-btn:hover {
+            background-color: #e6b32e;
+        }        
     </style>
+    <script src="./authentication.js"></script>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <span class="back-btn">&lt;</span>
+            <!-- <span class="back-btn">&lt;</span> -->
             交大個人記帳小幫手
-            <a class="login-link" href="#">登入</a>
+            <!-- <a class="login-link" href="#">登入</a> -->
         </div>
 
         <!-- Login Form -->
         <div class="login-box">
-            <h1>帳號註冊</h1>
-            <form>
-                <!-- ID -->
+            <h1>註冊</h1>
+            <form onsubmit="signup(event)">
+                <!-- Username -->
                 <div class="form-group">
-                    <label for="id">身分證字號</label>
-                    <input type="text" id="id" placeholder="ID">
-                    <span class="clear-btn">&times;</span>
-                </div>
-
-                <!-- User Code -->
-                <div class="form-group">
-                    <label for="user-code">使用者代碼</label>
-                    <input type="text" id="user-code" placeholder="User Code">
+                    <label for="username">帳號</label>
+                    <input type="text" id="username" placeholder="Username">
                     <span class="clear-btn">&times;</span>
                 </div>
 
                 <!-- Password -->
                 <div class="form-group">
-                    <label for="password">網路密碼</label>
+                    <label for="password">密碼</label>
                     <input type="password" id="password" placeholder="Password">
                     <span class="clear-btn">&times;</span>
                 </div>
 
                 <!-- Buttons -->
-                <button type="button" class="btn signup-btn">創建帳號/Signup</button>
-                
+                <button type="submit" class="btn signup-btn">註冊</button>
+                <p class="divider">或</p>
+                <a href="login.html" class="btn login-btn">已經有帳號?</a>
             </form>
+            <div id="message"></div>
         </div>
     </div>
 </body>
