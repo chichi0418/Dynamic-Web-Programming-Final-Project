@@ -3,7 +3,8 @@
         HTTP request method: POST
         
         From frontend (Content-Type: application/x-www-form-urlencoded):
-        "currency"
+        "from_currency"
+        "to_currency"
             
         To frontend (Content-Type: application/json):
         [
@@ -15,9 +16,10 @@
     
     header('Content-Type: application/json; charset=UTF-8');
 
-    $currency = $_POST['currency'] ?? null;
+    $from_currency = $_POST['from_currency'] ?? null;
+    $to_currency = $_POST['to_currency'] ?? null;
     
-    if (!$currency) {           
+    if (!$from_currency || !$to_currency) {           
         http_response_code(400);     
         echo json_encode([
             "status" => "error",
@@ -40,31 +42,64 @@
 
     $data = json_decode($response, true);
 
-    $usdtwd = $data['USDTWD']['Exrate'];
-
-    if ($currency === "USD") {
-        $exchange_rate = 1 / $usdtwd;
-        http_response_code(200);
+    if ($data === null) {
+        http_response_code(500);
         echo json_encode([
-            "status" => "success",
-            "exchange_rate" => $exchange_rate,
+            "status" => "error",
+            "message" => "Invalid response from stock API.",
         ]);
-    } else {
-        if (!isset($data['USD' . $currency]['Exrate'])) {
+        exit;
+    }
+
+    if ($from_currency === $to_currency) {
+        http_response_code(200);
+        $exchange_rate = (double)1;
+    } else if ($from_currency === 'USD') {
+        if (!isset($data['USD' . $to_currency]['Exrate'])) {
             http_response_code(404);
             echo json_encode([
                 "status" => "error",
-                "message" => "Currency not supported.",
+                "message" => "Currency not supported: $from_currency.",
             ]);
             exit;
         }
-
-        $usdcurrency = $data['USD' . $currency]['Exrate'];
-        $exchange_rate = $usdcurrency / $usdtwd;
-        http_response_code(200);
-        echo json_encode([
-            "status" => "success",
-            "exchange_rate" => $exchange_rate,
-        ]);
+        $exchange_rate = $data['USD' . $to_currency]['Exrate'];
+    } else if ($to_currency == 'USD') {
+        if (!isset($data['USD' . $from_currency]['Exrate'])) {
+            http_response_code(404);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Currency not supported: $from_currency.",
+            ]);
+            exit;
+        }
+        $exchange_rate = 1 / $data['USD' . $from_currency]['Exrate'];
+    } else {
+        if (!isset($data['USD' . $from_currency]['Exrate'])) {
+            http_response_code(404);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Currency not supported: $from_currency.",
+            ]);
+            exit;
+        }
+        
+        if (!isset($data['USD' . $to_currency]['Exrate'])) {
+            http_response_code(404);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Currency not supported: $to_currency.",
+            ]);
+            exit;
+        }
+        $usd_from = $data['USD' . $from_currency]['Exrate'];
+        $usd_to = $data['USD' . $to_currency]['Exrate'];
+        $exchange_rate = $usd_to / $usd_from;
     }
+
+    http_response_code(200);
+    echo json_encode([
+        "status" => "success",
+        "exchange_rate" => $exchange_rate,
+    ]);
 ?>
