@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ch">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收支紀錄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('earn.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(240, 248, 255, 0.35);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #fff;
+            background-color: #d9252c;
+            padding: 20px 0;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #007bff;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">收支紀錄</h1>
+        <form>
+            <div class="form-group">
+                <label for="amount">金額</label>
+                <input type="number" id="amount" placeholder="請輸入金額" required>
+            </div>
+
+            <div class="form-group">
+                <label for="reason">理由</label>
+                <textarea id="reason" placeholder="請輸入收支理由" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="type">收支類型</label>
+                <select id="type" required>
+                    <option value="" disabled selected>請選擇類型</option>
+                    <option value="income">收入</option>
+                    <option value="expense">支出</option>
+                </select>
+            </div>
+
+            <div id="expense-categories" class="form-group" style="display: none;">
+                <label>支出分類</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" value="food"> 食</label>
+                    <label><input type="checkbox" value="clothing"> 衣</label>
+                    <label><input type="checkbox" value="housing"> 住</label>
+                    <label><input type="checkbox" value="transportation"> 行</label>
+                    <label><input type="checkbox" value="entertainment"> 育樂</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="saveRecord()">儲存</button>
+        </form>
+    </div>
+
+    <script>
+        const typeSelect = document.getElementById('type');
+        const expenseCategories = document.getElementById('expense-categories');
+
+        typeSelect.addEventListener('change', () => {
+            if (typeSelect.value === 'expense') {
+                expenseCategories.style.display = 'block';
+            } else {
+                expenseCategories.style.display = 'none';
+            }
+        });
+
+        function saveRecord() {
+            const amount = document.getElementById('amount').value;
+            const reason = document.getElementById('reason').value;
+            const type = document.getElementById('type').value;
+            const selectedCategories = Array.from(expenseCategories.querySelectorAll('input:checked')).map(checkbox => checkbox.value);
+
+            if (!amount || !reason || !type) {
+                alert('請填寫完整資訊！');
+                return;
+            }
+
+            const record = {
+                amount,
+                reason,
+                type,
+                categories: type === 'expense' ? selectedCategories : []
+            };
+
+            console.log('儲存的紀錄:', record);
+            alert('紀錄已儲存！');
+        }
+
+        // 獲取 URL 中的日期參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const date = urlParams.get('date');
+    
+        if (date) {
+            // 判定超入超支的條件
+            const condition = "red"; // 超支情況
+            
+            // 儲存到 Local Storage
+            const calendarStatus = JSON.parse(localStorage.getItem('calendarStatus')) || {};
+            calendarStatus[date] = condition;
+            localStorage.setItem('calendarStatus', JSON.stringify(calendarStatus));
+    
+            // 模擬返回到日曆頁面
+            window.location.href = "main.html";
+        }
+    </script>
+</body>
+
+</html>

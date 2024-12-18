@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>匯率轉換器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #d9252c, #ffffff);
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .converter-container {
+            width: 60%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-section {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .currency-icons {
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .currency-icon {
+            width: calc(33.33% - 20px);
+            height: 100px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .currency-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .currency-icon img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d9252c;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #d9252c;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #d9252c;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #b71d23;
+        }
+
+        .result {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="converter-container">
+        <div class="input-section">
+            <h1 class="title">匯率轉換器</h1>
+            <form>
+                <div class="form-group">
+                    <label for="amount">金額</label>
+                    <input type="number" id="amount" placeholder="請輸入金額" required>
+                </div>
+                <div class="form-group">
+                    <label for="from-currency">從 (貨幣)</label>
+                    <input type="text" id="from-currency" placeholder="點選下方貨幣圖標" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="to-currency">轉換為 (貨幣)</label>
+                    <input type="text" id="to-currency" placeholder="點選下方貨幣圖標" readonly>
+                </div>
+                <button type="button" class="btn">轉換</button>
+            </form>
+            <div class="result" id="result">結果將顯示在這裡</div>
+        </div>
+        <div class="currency-icons">
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='USD';">
+                <img src="images/usd.jpg" alt="美元" style="width: 160px;height: 80px">
+            </div>
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='EUR';">
+                <img src="images/eur.jpg" alt="歐元" style="width: 160px;height: 80px">
+            </div>
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='JPY';">
+                <img src="images/jpy.jpg" alt="日元" style="width: 160px;height: 80px">
+            </div>
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='TWD';">
+                <img src="images/twd.jpg" alt="新台幣" style="width: 160px;height: 80px">
+            </div>
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='YUA';">
+                <img src="images/yua.jpg" alt="人民幣" style="width: 160px;height: 80px">
+            </div>
+            <div class="currency-icon" onclick="document.getElementById('from-currency').value='MAL';">
+                <img src="images/mal.jpg" alt="馬幣" style="width: 160px;height: 80px">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

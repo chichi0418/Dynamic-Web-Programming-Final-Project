@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用戶登入</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffdde1, #fff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ff7f88;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .header .login-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Login Box */
+        .login-box {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-box h1 {
+            font-size: 24px;
+            color: #ff7f88;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .form-group input:focus {
+            border-color: #ff7f88;
+            outline: none;
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        
+
+        /* Agreement */
+        .agreement {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .agreement a {
+            color: #ff7f88;
+            text-decoration: none;
+        }
+
+        .agreement a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .login-btn {
+            background-color: #ccc;
+            color: white;
+            border: none;
+            cursor: not-allowed;
+        }
+
+        .secondary-btn {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .divider {
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .create-account-btn {
+            background-color: #ffcc33;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .create-account-btn:hover {
+            background-color: #e6b32e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <span class="back-btn">&lt;</span>
+            交大個人記帳小幫手
+            <a class="login-link" href="#">登入</a>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-box">
+            <h1>會員登入</h1>
+            <form>
+                <!-- ID -->
+                <div class="form-group">
+                    <label for="id">身分證字號</label>
+                    <input type="text" id="id" placeholder="ID">
+                    <span class="clear-btn">&times;</span>
+                </div>
+
+                <!-- User Code -->
+                <div class="form-group">
+                    <label for="user-code">使用者代碼</label>
+                    <input type="text" id="user-code" placeholder="User Code">
+                    <span class="clear-btn">&times;</span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">網路密碼</label>
+                    <input type="password" id="password" placeholder="Password">
+                    <span class="clear-btn">&times;</span>
+                </div>
+
+
+                <!-- Agreement -->
+                <p class="agreement">
+                    登入即表示已了解並同意交大個人記帳小幫手<br>
+                    可以蒐集處理利用 
+                    <a href="#">個資告知事項</a> 所載個資內容
+                </p>
+
+                <!-- Buttons -->
+                <button type="button" class="btn login-btn">登入/Login</button>
+                <a href="#" class="secondary-btn">申請帳號/密碼重置</a>
+                <p class="divider">或</p>
+                <a href="signup.html" class="btn create-account-btn">還沒有帳戶/Create Account</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
