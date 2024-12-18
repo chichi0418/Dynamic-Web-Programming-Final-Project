@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支出圖表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #be4d51;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .chart-container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .summary {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart-container">
+        <h1>本月支出圖表</h1>
+        <canvas id="expenseChart"></canvas>
+        <div class="summary">
+            <p>本月總收入：<span id="total-income">0</span> 元</p>
+            <p>本月總支出：<span id="total-expense">0</span> 元</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const expenseData = {
+            /*這裡要填入circumstane.html的數據`,我只是先放測試*/
+            food: 100,
+            clothing: 100,
+            housing:100 ,
+            transportation:100 ,
+            education:100,
+            entertainment:100 
+        };
+
+        const totalIncome = 600;//總收入
+        const totalExpense = Object.values(expenseData).reduce((a, b) => a + b, 0);總支出
+
+        // 更新總收入和總支出
+        document.getElementById('total-income').textContent = totalIncome.toLocaleString();
+        document.getElementById('total-expense').textContent = totalExpense.toLocaleString();
+
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+
+        const data = {
+            labels: ['食', '衣', '住', '行', '育','樂'],
+            datasets: [{
+                data: Object.values(expenseData),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF','#EB8C00'],
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF','#EB8C00']
+            }]
+        };
+
+        const options = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = tooltipItem.raw;
+                            const percentage = ((value / total) * 100).toFixed(2);
+                            return `${tooltipItem.label}: ${value} 元 (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        };
+
+        const expenseChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: options
+        });
+    </script>
+</body>
+
+</html>
