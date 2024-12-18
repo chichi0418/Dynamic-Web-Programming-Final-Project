@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="zh-Hant">
 
 <head>
@@ -15,7 +15,6 @@
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(to bottom, #d9252c, #ffffff);
-            
             display: flex;
             justify-content: center;
             align-items: center;
@@ -140,37 +139,56 @@
                 </div>
                 <div class="form-group">
                     <label for="from-currency">從 (貨幣)</label>
-                    <input type="text" id="from-currency" placeholder="點選下方貨幣圖標" readonly>
+                    <input type="text" id="from-currency" placeholder="點選下方貨幣圖標" onclick="setActiveInput('from-currency')" readonly>
                 </div>
                 <div class="form-group">
                     <label for="to-currency">轉換為 (貨幣)</label>
-                    <input type="text" id="to-currency" placeholder="點選下方貨幣圖標" readonly>
+                    <input type="text" id="to-currency" placeholder="點選下方貨幣圖標" onclick="setActiveInput('to-currency')" readonly>
                 </div>
-                <button type="button" class="btn">轉換</button>
+                <button type="button" class="btn" onclick="convertCurrency()">轉換</button>
             </form>
-            <div class="result" id="result">結果將顯示在這裡</div>
+            <div class="result" id="result">結果將顯示在這裏</div>
         </div>
         <div class="currency-icons">
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='USD';">
-                <img src="images/usd.jpg" alt="美元" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'USD')">
+                <img src="./images/usd.jpg" alt="美元" style="width: 160px;height: 80px">
             </div>
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='EUR';">
-                <img src="images/eur.jpg" alt="歐元" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'EUR')">
+                <img src="./images/eur.jpg" alt="歐元" style="width: 160px;height: 80px">
             </div>
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='JPY';">
-                <img src="images/jpy.jpg" alt="日元" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'JPY')">
+                <img src="./images/jpy.jpg" alt="日元" style="width: 160px;height: 80px">
             </div>
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='TWD';">
-                <img src="images/twd.jpg" alt="新台幣" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'TWD')">
+                <img src="./images/twd.jpg" alt="新台幣" style="width: 160px;height: 80px">
             </div>
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='YUA';">
-                <img src="images/yua.jpg" alt="人民幣" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'YUA')">
+                <img src="./images/yua.jpg" alt="人民幣" style="width: 160px;height: 80px">
             </div>
-            <div class="currency-icon" onclick="document.getElementById('from-currency').value='MAL';">
-                <img src="images/mal.jpg" alt="馬幣" style="width: 160px;height: 80px">
+            <div class="currency-icon" onclick="setCurrency(activeInputId, 'MAL')">
+                <img src="./images/mal.jpg" alt="馬幣" style="width: 160px;height: 80px">
             </div>
         </div>
     </div>
+
+    <script>
+        let activeInputId = 'from-currency';
+
+        function setActiveInput(inputId) {
+            activeInputId = inputId;
+        }
+
+        function setCurrency(inputId, currency) {
+            document.getElementById(inputId).value = currency;
+        }
+
+        function convertCurrency() {
+            const amount = document.getElementById('amount').value;
+            const fromCurrency = document.getElementById('from-currency').value;
+            const toCurrency = document.getElementById('to-currency').value;
+            alert(`轉換金額 ${amount} ，由 ${fromCurrency} 換成 ${toCurrency}`);
+        }
+    </script>
 </body>
 
 </html>
