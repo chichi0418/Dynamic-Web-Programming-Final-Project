@@ -34,6 +34,7 @@
     $time = $_POST['time'] ?? null;
     $to_user = $_POST['to_user'] ?? null;
     $to_account = $_POST['to_account'] ?? null;
+    $password = $_POST['password'];
 
     // Validate required fields
     if ($description === null || $amount === null || $category === null || $user === null || $account === null || $time === null) {
@@ -115,6 +116,21 @@
             exit;
         }
         $to_user_id = $result['id'];
+        $query = "SELECT `password` FROM `users` WHERE `username` = :username";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':username', $to_user, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            if (!password_verify($password, $result['password'])) {
+                http_response_code(401);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "密碼錯誤！",
+                ]);
+                exit;
+            }
+        }
     }
 
     // Get to_account id (if provided)
