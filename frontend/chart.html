@@ -58,16 +58,16 @@
     <script>
         const expenseData = {
             /*這裡要填入circumstane.html的數據`,我只是先放測試*/
-            food: 100,
+            food: 500,
             clothing: 100,
             housing:100 ,
             transportation:100 ,
-            education:100,
+            education:300,
             entertainment:100 
         };
 
         const totalIncome = 600;//總收入
-        const totalExpense = Object.values(expenseData).reduce((a, b) => a + b, 0);總支出
+        const totalExpense = Object.values(expenseData).reduce((a, b) => a + b, 0); //總支出
 
         // 更新總收入和總支出
         document.getElementById('total-income').textContent = totalIncome.toLocaleString();

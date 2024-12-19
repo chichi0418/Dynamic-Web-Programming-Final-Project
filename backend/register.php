@@ -13,6 +13,11 @@
         ]
     */
     
+    // deal with  CORS（跨來源資源共享） problem
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
+
     header('Content-Type: application/json; charset=UTF-8');
 
     if (!isset($_POST['username']) || !isset($_POST['password'])) {

@@ -69,6 +69,10 @@ function login() {
     .then(data => {
         if (data.status === "success") {
             message.innerHTML = "登入成功！";
+            // 等 0.8 秒後跳進系統主頁面
+            setTimeout(() => {
+                window.location.href = "main.html"; // 跳轉到 main.html
+            }, 800); // 等待 800 毫秒 (0.8 秒)
         } else {
             message.innerHTML = data.message;
         }
