@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳小幫手 | 收支總覽</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('./images/earn.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(240, 248, 255, 0.6);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #d9252c;
+            padding: 15px 0;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .summary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .summary-section {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .summary-section h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .summary-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .summary-item {
+            font-size: 16px;
+            color: #555;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item span {
+            font-weight: bold;
+            color: #d9252c;
+        }
+
+        .summary h3 {
+            text-align: center;
+        }
+
+        /* Table Styling */
+        .summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary th,
+        .summary td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script src="./read_transaction.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">收支總覽</h1>
+        <div class="summary">
+            <!-- <div class="summary-section">
+                <h3>收入項</h3>
+                <ul>
+                    <li class="summary-item">存入 <span>30,000 元</span></li>
+                </ul>
+            </div>
+            <div class="summary-section">
+                <h3>支出項</h3>
+                <ul>
+                    <li class="summary-item">食 <span>5,000 元</span></li>
+                    <li class="summary-item">衣 <span>3,000 元</span></li>
+                    <li class="summary-item">住 <span>15,000 元</span></li>
+                    <li class="summary-item">行 <span>2,000 元</span></li>
+                    <li class="summary-item">育 <span>4,000 元</span></li>
+                    <li class="summary-item">樂 <span>4,000 元</span></li>
+                </ul>
+            </div> -->
+            <div class="summary" id="income">
+                <h3>收入項</h3>
+            </div>
+            <div class="summary" id="expense">
+                <h3>支出項</h3>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

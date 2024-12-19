@@ -3,7 +3,7 @@
         HTTP request method: POST
 
         From frontend (Content-Type: application/x-www-form-urlencoded):
-        "user_id"
+        "time"
 
         To frontend (Content-Type: application/json):
         [
@@ -12,14 +12,27 @@
             "result": (array),
         ]
     */
+    
+    session_start();
 
     header('Content-Type: application/json; charset=UTF-8');
     
     require_once './connection.php';
 
-    $user_id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : null;
+    $user = $_SESSION['username'] ?? null;
+    $time = $_POST['time'] ?? null;
 
-    if ($user_id === null) {
+    $datetime = date('Y-m-d H:i:s', strtotime($time));
+    if (!$datetime) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Invalid time format."
+        ]);
+        exit;
+    }
+
+    if ($user === null || $time === null) {
         http_response_code(400);
         echo json_encode([
             "status" => "error",
@@ -28,13 +41,34 @@
         exit;
     }
     
-    $query = "SELECT `t`.`amount`, `t`.`category`, `a`.`name` AS `account`, `t`.`time`, `tu`.`username` AS `to_user`, `ta`.`name` AS `to_account`
-              FROM `transactions` `t`
-              LEFT JOIN `accounts` `a` ON `t`.`account` = `a`.`id`
-              LEFT JOIN `users` `tu` ON `t`.`to_user` = `tu`.`id`
-              LEFT JOIN `accounts` `ta` ON `t`.`to_account` = `ta`.`id`";
+    // Get user id
+    $user_id = null;
+    $query = "SELECT `id` FROM `users` WHERE `username` = :username";
     $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':username', $user, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$result) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => "error",
+            "message" => "user not found."
+        ]);
+        exit;
+    }
+    $user_id = $result['id'];
+    
+    
+    $query = "SELECT `t`.`amount`, `t`.`description`, `t`.`category`, `a`.`name` AS `account`, `t`.`time`, `tu`.`username` AS `to_user`, `ta`.`name` AS `to_account`
+                FROM `transactions` `t`
+                LEFT JOIN `accounts` `a` ON `t`.`account` = `a`.`id`
+                LEFT JOIN `users` `tu` ON `t`.`to_user` = `tu`.`id`
+                LEFT JOIN `accounts` `ta` ON `t`.`to_account` = `ta`.`id`
+                WHERE `t`.`time` = :time AND `t`.`user` = :user_id";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':time', $datetime, PDO::PARAM_STR);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
