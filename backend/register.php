@@ -54,6 +54,41 @@
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hased_password, PDO::PARAM_STR);
             $stmt->execute();
+
+            $url = "http://localhost/Dynamic-Web-Programming-Final-Project/backend/create_account.php";
+            $data = [
+                "name" => $username,
+                "balance" => 0,
+                "user" => $username,
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+            $response = curl_exec($ch);
+            if (curl_errno($ch)) {        
+                http_response_code(500);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "註冊失敗，請再試一次！",
+                ]);
+                exit;
+            }
+            
+            $data = json_decode($response, true);
+
+            if ($data['status'] === 'error') {       
+                http_response_code(500);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "註冊失敗，請再試一次！",
+                ]);
+                exit;
+            }
+
             http_response_code(201);
             echo json_encode([
                 "status" => "success",

@@ -29,6 +29,10 @@ function signup(event) {
     .then(data => {
         if (data.status === "success") {
             message.innerHTML = "註冊成功！";
+            // 等 0.8 秒後跳進系統主頁面
+            setTimeout(() => {
+                window.location.href = "login.html"; // 跳轉到 login.html
+            }, 800); // 等待 800 毫秒 (0.8 秒)
         } else {
             message.innerHTML = data.message;
         }
@@ -38,7 +42,7 @@ function signup(event) {
     })
 }
 
-function login() {
+function login(event) {
     event.preventDefault();
 
     const username = document.getElementById("username").value;
