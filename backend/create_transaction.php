@@ -6,8 +6,8 @@
         "description"
         "amount"
         "category"
-        "user_id"
-        "account_id"
+        "user"
+        "account"
         "time"
         "to_user"
         "to_account"
@@ -19,6 +19,8 @@
         ]
     */
     
+    session_start();
+
     header('Content-Type: application/json; charset=UTF-8');
 
     require_once './connection.php';
@@ -27,14 +29,14 @@
     $description = $_POST['description'] ?? null;
     $amount = isset($_POST['amount']) ? (int)$_POST['amount'] : null;
     $category = $_POST['category'] ?? null;
-    $user_id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : null;
-    $account_id = isset($_POST['account_id']) ? (int)$_POST['account_id'] : null;
+    $user = $_SESSION['username'] ?? null;
+    $account = $_SESSION['username'] ?? null;
     $time = $_POST['time'] ?? null;
     $to_user = $_POST['to_user'] ?? null;
     $to_account = $_POST['to_account'] ?? null;
 
     // Validate required fields
-    if ($description === null || $amount === null || $category === null || $user_id === null || $account_id === null || $time === null) {
+    if ($description === null || $amount === null || $category === null || $user === null || $account === null || $time === null) {
         http_response_code(400);
         echo json_encode([
             "status" => "error",
@@ -42,7 +44,44 @@
         ]);
         exit;
     }
+    
+    // Get user id
+    $user_id = null;
+    $query = "SELECT `id` FROM `users` WHERE `username` = :username";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':username', $user, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$result) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => "error",
+            "message" => "user not found."
+        ]);
+        exit;
+    }
+    $user_id = $result['id'];
 
+    // Get account id
+    $account_id = null;
+    $query = "SELECT `accounts`.`id` FROM `accounts` 
+              JOIN `user_accounts` ON `accounts`.`id` = `user_accounts`.`account_id` 
+              WHERE `user_accounts`.`user_id` = :user_id AND `accounts`.`name` = :account_name";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':account_name', $account, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$result) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => "error",
+            "message" => "account not found."
+        ]);
+        exit;
+    }
+    $account_id = $result['id'];
+    
     // Verify user and account
     $query = "SELECT COUNT(*) FROM `user_accounts` WHERE `user_id` = :user_id AND `account_id` = :account_id";
     $stmt = $pdo->prepare($query);

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ch">
+<html lang="zh-Hant">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>收支紀錄</title>
+    <title>記帳小幫手 | 收支紀錄</title>
     <style>
         * {
             margin: 0;
@@ -66,7 +66,9 @@
             color: #333;
         }
 
-        .form-group input, .form-group textarea, .form-group select {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 10px;
             font-size: 14px;
@@ -76,19 +78,22 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             border-color: #007bff;
         }
 
-        .checkbox-group {
+        .radio-group {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
 
-        .checkbox-group label {
+        .radio-group label {
             font-size: 14px;
+            text-align: center;
         }
 
         .btn {
@@ -105,13 +110,24 @@
         .btn:hover {
             background-color: #0056b3;
         }
+
+        #message {
+            padding: 10px;
+            text-align: center;
+        }
     </style>
+    <script src="./transaction.js"></script>
 </head>
 
 <body>
     <div class="container">
         <h1 class="title">收支紀錄</h1>
-        <form>
+        <form onsubmit="createTransaction(event)">
+            <div class="form-group">
+                <label for="date">日期 (幾月幾日)</label>
+                <input type="date" id="date" required>
+            </div>
+
             <div class="form-group">
                 <label for="amount">金額</label>
                 <input type="number" id="amount" placeholder="請輸入金額" required>
@@ -133,17 +149,19 @@
 
             <div id="expense-categories" class="form-group" style="display: none;">
                 <label>支出分類</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" value="food"> 食</label>
-                    <label><input type="checkbox" value="clothing"> 衣</label>
-                    <label><input type="checkbox" value="housing"> 住</label>
-                    <label><input type="checkbox" value="transportation"> 行</label>
-                    <label><input type="checkbox" value="entertainment"> 育樂</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="category" value="food"> 食</label>
+                    <label><input type="radio" name="category" value="clothing"> 衣</label>
+                    <label><input type="radio" name="category" value="housing"> 住</label>
+                    <label><input type="radio" name="category" value="transportation"> 行</label>
+                    <label><input type="radio" name="category" value="education"> 育</label>
+                    <label><input type="radio" name="category" value="entertainment"> 樂</label>
                 </div>
             </div>
 
-            <button type="button" class="btn" onclick="saveRecord()">儲存</button>
+            <button type="submit" class="btn">儲存</button>
         </form>
+        <div id="message"></div>
     </div>
 
     <script>
@@ -158,44 +176,29 @@
             }
         });
 
-        function saveRecord() {
-            const amount = document.getElementById('amount').value;
-            const reason = document.getElementById('reason').value;
-            const type = document.getElementById('type').value;
-            const selectedCategories = Array.from(expenseCategories.querySelectorAll('input:checked')).map(checkbox => checkbox.value);
+        // function saveRecord() {
+        //     const date = document.getElementById('date').value;
+        //     const amount = document.getElementById('amount').value;
+        //     const reason = document.getElementById('reason').value;
+        //     const type = document.getElementById('type').value;
+        //     const selectedCategories = Array.from(expenseCategories.querySelectorAll('input:checked')).map(checkbox => checkbox.value);
 
-            if (!amount || !reason || !type) {
-                alert('請填寫完整資訊！');
-                return;
-            }
+        //     if (!date || !amount || !reason || !type) {
+        //         alert('請填寫完整資訊！');
+        //         return;
+        //     }
 
-            const record = {
-                amount,
-                reason,
-                type,
-                categories: type === 'expense' ? selectedCategories : []
-            };
+        //     const record = {
+        //         date,
+        //         amount,
+        //         reason,
+        //         type,
+        //         categories: type === 'expense' ? selectedCategories : []
+        //     };
 
-            console.log('儲存的紀錄:', record);
-            alert('紀錄已儲存！');
-        }
-
-        // 獲取 URL 中的日期參數
-        const urlParams = new URLSearchParams(window.location.search);
-        const date = urlParams.get('date');
-    
-        if (date) {
-            // 判定超入超支的條件
-            const condition = "red"; // 超支情況
-            
-            // 儲存到 Local Storage
-            const calendarStatus = JSON.parse(localStorage.getItem('calendarStatus')) || {};
-            calendarStatus[date] = condition;
-            localStorage.setItem('calendarStatus', JSON.stringify(calendarStatus));
-    
-            // 模擬返回到日曆頁面
-            window.location.href = "main.html";
-        }
+        //     console.log('儲存的紀錄:', record);
+        //     alert('紀錄已儲存！');
+        // }
     </script>
 </body>
 
