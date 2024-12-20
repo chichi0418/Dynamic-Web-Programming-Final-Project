@@ -34,7 +34,7 @@
     $time = $_POST['time'] ?? null;
     $to_user = $_POST['to_user'] ?? null;
     $to_account = $_POST['to_account'] ?? null;
-    $password = $_POST['password'];
+    $password = $_POST['password'] ?? null;
 
     // Validate required fields
     if ($description === null || $amount === null || $category === null || $user === null || $account === null || $time === null) {
