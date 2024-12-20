@@ -56,59 +56,83 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const expenseData = {
-            /*這裡要填入circumstane.html的數據`,我只是先放測試*/
-            food: 500,
-            clothing: 100,
-            housing:100 ,
-            transportation:100 ,
-            education:300,
-            entertainment:100 
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        const formData = new URLSearchParams({ time: currentMonth });
+        let expenseData = {
+            food: 0,
+            clothing: 0,
+            housing: 0,
+            transportation: 0,
+            education: 0,
+            entertainment: 0,
         };
-
-        const totalIncome = 600;//總收入
-        const totalExpense = Object.values(expenseData).reduce((a, b) => a + b, 0); //總支出
-
-        // 更新總收入和總支出
-        document.getElementById('total-income').textContent = totalIncome.toLocaleString();
-        document.getElementById('total-expense').textContent = totalExpense.toLocaleString();
-
-        const ctx = document.getElementById('expenseChart').getContext('2d');
-
-        const data = {
-            labels: ['食', '衣', '住', '行', '育','樂'],
-            datasets: [{
-                data: Object.values(expenseData),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF','#EB8C00'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF','#EB8C00']
-            }]
-        };
-
-        const options = {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
-                            const value = tooltipItem.raw;
-                            const percentage = ((value / total) * 100).toFixed(2);
-                            return `${tooltipItem.label}: ${value} 元 (${percentage}%)`;
+    
+        fetch('../backend/chart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.status === 'success') {
+                // 更新 expenseData
+                Object.keys(expenseData).forEach(key => {
+                    if (data.result[key] !== undefined) {
+                        expenseData[key] = parseFloat(data.result[key]);
+                    }
+                });
+    
+                const totalIncome = parseFloat(data.result['income']) || 0;
+                const totalExpense = -Object.values(expenseData).reduce((sum, value) => sum + value, 0);
+    
+                document.getElementById('total-income').textContent = totalIncome.toLocaleString();
+                document.getElementById('total-expense').textContent = totalExpense.toLocaleString();
+    
+                // 更新圖表資料
+                const ctx = document.getElementById('expenseChart').getContext('2d');
+                const chartData = {
+                    labels: ['食', '衣', '住', '行', '育', '樂'],
+                    datasets: [{
+                        data: Object.values(expenseData),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#EB8C00'],
+                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#EB8C00']
+                    }]
+                };
+    
+                const chartOptions = {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = tooltipItem.raw;
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} 元 (${percentage}%)`;
+                                }
+                            }
                         }
                     }
-                }
+                };
+    
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: chartData,
+                    options: chartOptions
+                });
             }
-        };
-
-        const expenseChart = new Chart(ctx, {
-            type: 'pie',
-            data: data,
-            options: options
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
         });
     </script>
+    
 </body>
 
 </html>
