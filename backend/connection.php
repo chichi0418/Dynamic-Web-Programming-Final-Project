@@ -7,11 +7,11 @@
     $host = '127.0.0.1';
     $data = 'accounting';
     $user = 'root';
-    $pass = '';
-    // $pass = 'root';
+    $pass = ''; // yan
+    // $pass = 'root'; //chi
     $chrs = 'utf8mb4';
-    $attr = "mysql:host=$host;dbname=$data;charset=$chrs";
-    // $attr = "mysql:host=$host;port=8890;dbname=$data;charset=$chrs";
+    $attr = "mysql:host=$host;dbname=$data;charset=$chrs"; // yan
+    // $attr = "mysql:host=$host;port=8890;dbname=$data;charset=$chrs"; // chi
     $opts = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

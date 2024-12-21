@@ -49,13 +49,16 @@
     } else {
         $hased_password = password_hash($password, PASSWORD_DEFAULT);
         try {
+            // 插入新用戶到資料庫
             $query = "INSERT INTO `users` (`username`, `password`) VALUES (:username, :password)";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hased_password, PDO::PARAM_STR);
             $stmt->execute();
-
+            
             $url = "http://localhost/Dynamic-Web-Programming-Final-Project/backend/create_account.php";
+            // $url = "http://localhost:8892/backend/create_account.php";
+
             $data = [
                 "name" => $username,
                 "balance" => 0,
@@ -73,7 +76,7 @@
                 http_response_code(500);
                 echo json_encode([
                     "status" => "error",
-                    "message" => "註冊失敗，請再試一次！",
+                    "message" => "註冊失敗，請再試一次！76",
                 ]);
                 exit;
             }
@@ -84,7 +87,7 @@
                 http_response_code(500);
                 echo json_encode([
                     "status" => "error",
-                    "message" => "註冊失敗，請再試一次！",
+                    "message" => "註冊失敗，請再試一次！87",
                 ]);
                 exit;
             }
@@ -97,7 +100,7 @@
             http_response_code(500);
             echo json_encode([
                 "status" => "error",
-                "message" => "註冊失敗，請再試一次！",
+                "message" => "註冊失敗，請再試一次！100",
             ]);
             exit;
         }
