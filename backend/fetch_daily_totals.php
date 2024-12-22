@@ -18,16 +18,33 @@
         echo json_encode(["status" => "error", "message" => "缺少必要參數"]);
         exit;
     }
+    
+    // Get user id
+    $user_id = null;
+    $query = "SELECT `id` FROM `users` WHERE `username` = :username";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':username', $user, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$result) {
+        http_response_code(400);
+        echo json_encode([
+            "status" => "error",
+            "message" => "user not found."
+        ]);
+        exit;
+    }
+    $user_id = $result['id'];
 
     try {
         $startDate = "2024-$month-01";
         $endDate = date("Y-m-t", strtotime($startDate));
 
-        $stmt = $pdo->prepare("SELECT DATE(time) as date, SUM(amount) as total 
+        $stmt = $pdo->prepare("SELECT DATE(time) as date, SUM(amount) as total
                                FROM transactions 
                                WHERE user = :user AND time BETWEEN :startDate AND :endDate 
                                GROUP BY DATE(time)");
-        $stmt->execute(['user' => $user, 'startDate' => $startDate, 'endDate' => $endDate]);
+        $stmt->execute(['user' => $user_id, 'startDate' => $startDate, 'endDate' => $endDate]);
         $results = $stmt->fetchAll();
 
         echo json_encode(["status" => "success", "data" => $results]);

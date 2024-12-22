@@ -440,6 +440,8 @@
         });
         
         async function fetchDailyTotals(user, month) {
+            console.log("user: ", user);
+            console.log("month: ", month);
             try {
                 const response = await fetch('../backend/fetch_daily_totals.php', {
                     method: 'POST',

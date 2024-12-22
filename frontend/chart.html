@@ -77,6 +77,27 @@
             height: auto;
         }
 
+        .total-income-expense {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .total-label {
+            color: #333;
+        }
+
+        .total-expense {
+            color: red;
+        }
+
+        .total-income {
+            color: green;
+        }
+
         .logout-btn {
             background: linear-gradient(to right, #d9252c, #b71b21);
             color: white;
@@ -132,11 +153,19 @@
         <div class="chart-container">
             <h1>本月收入圖表</h1>
             <canvas id="incomeChart"></canvas>
+            <div class="total-income-expense">
+                <div class="total-label">本月總收入:</div>
+                <div class="total-income" id="total-income">0</div>
+            </div>
         </div>
 
         <div class="chart-container">
             <h1>本月支出圖表</h1>
             <canvas id="expenseChart"></canvas>
+            <div class="total-income-expense">
+                <div class="total-label">本月總支出:</div>
+                <div class="total-expense" id="total-expense">0</div>
+            </div>
         </div>
     </div>
 
@@ -183,13 +212,13 @@
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        updateCharts(data.result);
-                    }
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateCharts(data.result);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
         }
 
         function updateCharts(data) {
@@ -201,6 +230,12 @@
 
             expenseChartInstance.data.datasets[0].data = Object.values(expenseData);
             expenseChartInstance.update();
+
+            const totalIncome = Object.values(incomeData).reduce((acc, curr) => acc + curr, 0);
+            const totalExpense = Object.values(expenseData).reduce((acc, curr) => acc + curr, 0);
+
+            document.getElementById("total-income").textContent = totalIncome.toFixed(0);
+            document.getElementById("total-expense").textContent = totalExpense.toFixed(0);
         }
 
         fetchData();
