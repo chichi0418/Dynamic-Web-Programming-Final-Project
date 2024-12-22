@@ -131,8 +131,6 @@
             background-color: #b71b21;
         }
 
-        
-
         .panel-header {
             background-color: #f1f5fc; 
             color: #333333; 
@@ -175,7 +173,32 @@
             justify-content: center;
             align-items: center;
         }
-        
+
+        .budget-container {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .budget-display {
+            font-size: 16px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .budget-btn {
+            background-color: #d9252c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .budget-btn:hover {
+            background-color: #b71b21;
+        }
+
         .calendar {
             width: 100%; 
             max-width: 600px; 
@@ -231,7 +254,7 @@
 
         .calendar-body {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 保持 7 列 */
+            grid-template-columns: repeat(7, 1fr);
         }
 
         .day {
@@ -247,9 +270,6 @@
         .day:hover {
             background-color: #d1f2eb;
         }
-        
-
-        
 
         .day.green {
             background-color: #35a635; 
@@ -278,45 +298,50 @@
 
         .day:nth-child(7n) {
             border-right: none;
-        
         }
+
         .day.empty {
             background-color: #e0e0e0;
         }
 
         .logout-btn {
-        background: linear-gradient(to right, #d9252c, #b71b21);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        font-weight: bold;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;   
-    }
+            background: linear-gradient(to right, #d9252c, #b71b21);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
 
-    .logout-btn:hover {
-        background: linear-gradient(to right, #b71b21, #d9252c);
-        transform: scale(1.05);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    }
+        .logout-btn:hover {
+            background: linear-gradient(to right, #b71b21, #d9252c);
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
 
-    .logout-btn:active {
-        transform: scale(0.95);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
+        .logout-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
 
-    #month-selector {
-        font-size: 16px;
-        padding: 5px;
-        margin-bottom: 10px; 
-        border: 1px solid #d9252c; 
-        border-radius: 5px;
-        text-align: center;
-    }
-    
+        #month-selector {
+            font-size: 16px;
+            padding: 5px;
+            margin-bottom: 10px; 
+            border: 1px solid #d9252c; 
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .month-budget {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -325,7 +350,7 @@
         <div class="navbar-logo">記帳小幫手</div>
         <div class="navbar-menu">
             <button class="logout-btn" onclick="logout()">登出</button>
-        </div>   
+        </div>
     </div>
 
     <div class="sidebar collapsed" id="sidebar">
@@ -339,24 +364,27 @@
     </div>
 
     <div class="main">
-       
-        <!-- 月曆 -->
         <div class="calendar-container">
-            <!-- 月曆選擇器 -->
-            <select id="month-selector">
-                <option value="0">一月</option>
-                <option value="1">二月</option>
-                <option value="2">三月</option>
-                <option value="3">四月</option>
-                <option value="4">五月</option>
-                <option value="5">六月</option>
-                <option value="6">七月</option>
-                <option value="7">八月</option>
-                <option value="8">九月</option>
-                <option value="9">十月</option>
-                <option value="10">十一月</option>
-                <option value="11">十二月</option>
-            </select>
+            <div class="month-budget">
+                <select id="month-selector">
+                    <option value="0">一月</option>
+                    <option value="1">二月</option>
+                    <option value="2">三月</option>
+                    <option value="3">四月</option>
+                    <option value="4">五月</option>
+                    <option value="5">六月</option>
+                    <option value="6">七月</option>
+                    <option value="7">八月</option>
+                    <option value="8">九月</option>
+                    <option value="9">十月</option>
+                    <option value="10">十一月</option>
+                    <option value="11">十二月</option>
+                </select>
+                <div class="budget-container">
+                    <span class="budget-display" id="budget-display">預算: 100</span>
+                    <button class="budget-btn" onclick="updateBudget()">更改預算</button>
+                </div>
+            </div>
             <div class="calendar">
                 <div id="calendar-header" class="calendar-header">
                     <button class="arrow-btn" id="prevMonth">&lt;</button>
@@ -379,15 +407,19 @@
 
     <script>
         let currentMonth = 0;
+        let budget = 100; // 預設預算為100
+
         const monthSelector = document.getElementById('month-selector');
         const calendarHeader = document.getElementById('calendar-header');
         const calendarBody = document.getElementById('calendar-body');
         const calendarTitle = document.getElementById('calendarTitle');
         const prevMonthBtn = document.getElementById('prevMonth');
         const nextMonthBtn = document.getElementById('nextMonth');
+        const budgetDisplay = document.getElementById('budget-display');
+
         const username = document.getElementById('username');
         username.innerHTML = sessionStorage.getItem('username');
-        
+
         const expandBtn = document.getElementById('expand-btn');
         const sidebar = document.getElementById('sidebar');
 
@@ -406,40 +438,70 @@
             const selectedMonth = parseInt(monthSelector.value, 10); 
             generateCalendar(selectedMonth); 
         });
+        
+        async function fetchDailyTotals(user, month) {
+            try {
+                const response = await fetch('../backend/fetch_daily_totals.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, month: month })
+                });
+                const data = await response.json();
+                console.log("Fetched Data:", data); // 調試輸出
+                return data.status === 'success' ? data.data : [];
+            } catch (error) {
+                console.error('Error fetching daily totals:', error);
+                return [];
+            }
+        }
 
-
-        function generateCalendar(month) {
+        async function generateCalendar(month) {
+            const user = sessionStorage.getItem('username');
+            const dailyTotals = await fetchDailyTotals(user, month + 1);
             
+            console.log("Fetched Data:", dailyTotals); // 調試 API 返回的數據
+            
+            const dailyTotalsMap = dailyTotals.reduce((map, item) => {
+                map[item.date] = item.total;
+                return map;
+            }, {});
+
             const monthNames = [
                 "一月", "二月", "三月", "四月", "五月", "六月",
                 "七月", "八月", "九月", "十月", "十一月", "十二月"
             ];
 
-            
             calendarTitle.textContent = `點選日期查看2024 ${monthNames[month]} 收支情況`;
 
-            // 清空
             calendarBody.innerHTML = "";
-            
+
             const firstDay = new Date(2024, month, 1).getDay();
             const daysInMonth = new Date(2024, month + 1, 0).getDate();
 
-            // 填充空白格子
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement("div");
                 emptyCell.classList.add("day", "empty");
                 calendarBody.appendChild(emptyCell);
             }
 
-            //填充日期
             for (let day = 1; day <= daysInMonth; day++) {
+                const dayDate = `2024-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const total = dailyTotalsMap[dayDate] || 0;
+                console.log(`Date: ${dayDate}, Total: ${total}`); // 調試輸出
+
                 const dayCell = document.createElement("div");
                 dayCell.classList.add("day");
+
+                if (total > budget) {
+                    dayCell.classList.add("red");
+                } else if (total > 0) {
+                    dayCell.classList.add("green");
+                }
+
                 dayCell.innerHTML = `<a href="record.html?month=${month + 1}&day=${day}">${day}</a>`;
                 calendarBody.appendChild(dayCell);
             }
 
-            //補日期
             const remainingCells = 7 - ((firstDay + daysInMonth) % 7);
             if (remainingCells < 7) {
                 for (let i = 0; i < remainingCells; i++) {
@@ -459,10 +521,18 @@
             currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
             generateCalendar(currentMonth);
         });
-        
+
         function logout() {
             sessionStorage.clear();
             window.location.href = "login.html";
+        }
+
+        function updateBudget() {   
+            const newBudget = prompt("請輸入新的預算:", budget);
+            if (newBudget !== null && !isNaN(newBudget) && newBudget.trim() !== "") {
+                budget = parseInt(newBudget, 10);
+                budgetDisplay.textContent = `預算: ${budget}`;
+            }
         }
 
         window.onload = () => {
