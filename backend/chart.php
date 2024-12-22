@@ -19,7 +19,7 @@ header('Content-Type: application/json; charset=UTF-8');
 
 require_once './connection.php';
 
-$user = $_SESSION['username'] ?? null;
+$user = $_POST['user'] ?? null;
 $time = $_POST['time'] ?? null;
 $start_date = $time . '-01';
 $end_date = date('Y-m-d', strtotime('+1 month', strtotime($start_date)));
@@ -61,20 +61,25 @@ $user_id = $result['id'];
 // Query to calculate category totals
 $query = "SELECT 
             CASE 
+                WHEN `t`.`category` = '匯款' AND `t`.`amount` > 0 THEN 'inboundRemittance'
+                WHEN `t`.`category` = '匯款' AND `t`.`amount` < 0 THEN 'outboundRemittance'
                 WHEN `t`.`category` = '食' THEN 'food'
                 WHEN `t`.`category` = '衣' THEN 'clothing'
                 WHEN `t`.`category` = '住' THEN 'housing'
                 WHEN `t`.`category` = '行' THEN 'transportation'
                 WHEN `t`.`category` = '育' THEN 'education'
                 WHEN `t`.`category` = '樂' THEN 'entertainment'
-                WHEN `t`.`category` = '收入' THEN 'income'
+                WHEN `t`.`category` = '薪水' THEN 'salary'
+                WHEN `t`.`category` = '獎金' THEN 'bonus'
+                WHEN `t`.`category` = '零用錢' THEN 'pocketMoney'
+                WHEN `t`.`category` = '投資獲利' THEN 'investment'
             END AS category,
             SUM(`t`.`amount`) AS total
-          FROM `transactions` `t`
-          WHERE `t`.`time` >= :start_date 
-            AND `t`.`time` < :end_date 
-            AND `t`.`user` = :user_id
-          GROUP BY category";
+        FROM `transactions` `t`
+        WHERE `t`.`time` >= :start_date 
+        AND `t`.`time` < :end_date 
+        AND `t`.`user` = :user_id
+        GROUP BY category;";
 
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':start_date', $start_date, PDO::PARAM_STR);

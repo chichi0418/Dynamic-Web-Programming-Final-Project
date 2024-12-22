@@ -203,12 +203,22 @@
             <div id="expense-categories" class="form-group" style="display: none;">
                 <label>支出分類</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="category" value="food"> 食</label>
-                    <label><input type="radio" name="category" value="clothing"> 衣</label>
-                    <label><input type="radio" name="category" value="housing"> 住</label>
-                    <label><input type="radio" name="category" value="transportation"> 行</label>
-                    <label><input type="radio" name="category" value="education"> 育</label>
-                    <label><input type="radio" name="category" value="entertainment"> 樂</label>
+                    <label><input type="radio" name="category" value="food">食</label>
+                    <label><input type="radio" name="category" value="clothing">衣</label>
+                    <label><input type="radio" name="category" value="housing">住</label>
+                    <label><input type="radio" name="category" value="transportation">行</label>
+                    <label><input type="radio" name="category" value="education">育</label>
+                    <label><input type="radio" name="category" value="entertainment">樂</label>
+                </div>
+            </div>
+
+            <div id="income-categories" class="form-group" style="display: none;">
+                <label>收入分類</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="category" value="salary">薪水</label>
+                    <label><input type="radio" name="category" value="bonus">獎金</label>
+                    <label><input type="radio" name="category" value="pocketMoney">零用錢</label>
+                    <label><input type="radio" name="category" value="investment">投資獲利</label>
                 </div>
             </div>
 
@@ -220,42 +230,25 @@
     <script>
 
         function main() {
-                        window.location.href = "main.html";
-                    }
+            window.location.href = "main.html";
+        }
+        
         const typeSelect = document.getElementById('type');
         const expenseCategories = document.getElementById('expense-categories');
+        const incomeCaregories = document.getElementById('income-categories');
 
         typeSelect.addEventListener('change', () => {
             if (typeSelect.value === 'expense') {
                 expenseCategories.style.display = 'block';
+                incomeCaregories.style.display = 'none';
+            } else if (typeSelect.value === 'income') {
+                expenseCategories.style.display = 'none';
+                incomeCaregories.style.display = 'block';
             } else {
                 expenseCategories.style.display = 'none';
+                incomeCaregories.style.display = 'none';   
             }
         });
-
-        // function saveRecord() {
-        //     const date = document.getElementById('date').value;
-        //     const amount = document.getElementById('amount').value;
-        //     const reason = document.getElementById('reason').value;
-        //     const type = document.getElementById('type').value;
-        //     const selectedCategories = Array.from(expenseCategories.querySelectorAll('input:checked')).map(checkbox => checkbox.value);
-
-        //     if (!date || !amount || !reason || !type) {
-        //         alert('請填寫完整資訊！');
-        //         return;
-        //     }
-
-        //     const record = {
-        //         date,
-        //         amount,
-        //         reason,
-        //         type,
-        //         categories: type === 'expense' ? selectedCategories : []
-        //     };
-
-        //     console.log('儲存的紀錄:', record);
-        //     alert('紀錄已儲存！');
-        // }
     </script>
 </body>
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>記帳小幫手 | 支出圖表</title>
+    <title>記帳小幫手 | 收入與支出圖表</title>
     <style>
         * {
             margin: 0;
@@ -16,15 +16,14 @@
             font-family: Arial, sans-serif;
             background-color: #be4d51;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            height: 100vh;
             flex-direction: column;
         }
 
         .navbar {
-            background-color: #ffffff; 
-            border-bottom: 2px solid #e6e6e6; 
+            background-color: #ffffff;
+            border-bottom: 2px solid #e6e6e6;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -38,14 +37,36 @@
         .navbar-logo {
             font-size: 24px;
             font-weight: bold;
-            color: #d9252c; 
+            color: #d9252c;
+        }
+
+        .month-selector {
+            text-align: center;
+            margin-top: 100px;
+            margin-bottom: 40px;
+        }
+
+        #month-selector {
+            font-size: 16px;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #d9252c;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .charts-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 40px;
         }
 
         .chart-container {
-            width: 80%;
-            max-width: 600px;
+            width: 50%;
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -56,155 +77,134 @@
             height: auto;
         }
 
-        .summary {
-            margin-top: 20px;
-            font-size: 18px;
+        .logout-btn {
+            background: linear-gradient(to right, #d9252c, #b71b21);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
-        .logout-btn {
-        background: linear-gradient(to right, #d9252c, #b71b21);
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        font-weight: bold;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;   
-    }
+        .logout-btn:hover {
+            background: linear-gradient(to right, #b71b21, #d9252c);
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
 
-    .logout-btn:hover {
-        background: linear-gradient(to right, #b71b21, #d9252c);
-        transform: scale(1.05);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .logout-btn:active {
-        transform: scale(0.95);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
+        .logout-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
     </style>
-    <script src="./auth.js"></script>
 </head>
 
 <body>
-
     <div class="navbar">
-        <div class="navbar-logo">記帳小幫手</div> 
+        <div class="navbar-logo">記帳小幫手</div>
         <div class="navbar-menu">
             <button class="logout-btn" onclick="main()">回主頁</button>
-        </div>  
+        </div>
     </div>
 
-    <div class="chart-container">
-        <h1>本月支出圖表</h1>
-        <canvas id="expenseChart"></canvas>
-        <div class="summary">
-            <p>本月總收入：<span id="total-income">0</span> 元</p>
-            <p>本月總支出：<span id="total-expense">0</span> 元</p>
+    <div class="month-selector">
+        <select id="month-selector">
+            <option value="0">一月</option>
+            <option value="1">二月</option>
+            <option value="2">三月</option>
+            <option value="3">四月</option>
+            <option value="4">五月</option>
+            <option value="5">六月</option>
+            <option value="6">七月</option>
+            <option value="7">八月</option>
+            <option value="8">九月</option>
+            <option value="9">十月</option>
+            <option value="10">十一月</option>
+            <option value="11">十二月</option>
+        </select>
+    </div>
+
+    <div class="charts-container">
+        <div class="chart-container">
+            <h1>本月收入圖表</h1>
+            <canvas id="incomeChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h1>本月支出圖表</h1>
+            <canvas id="expenseChart"></canvas>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
     <script>
-
         function main() {
-                        window.location.href = "main.html";
-            }
-        const currentMonth = new Date().toISOString().slice(0, 7);
-        const formData = new URLSearchParams({ time: currentMonth });
-        let expenseData = {
-            food: 0,
-            clothing: 0,
-            housing: 0,
-            transportation: 0,
-            education: 0,
-            entertainment: 0,
-        };
-    
-        fetch('../backend/chart.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: formData.toString()
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if (data.status === 'success') {
-                // 更新 expenseData
-                Object.keys(expenseData).forEach(key => {
-                    if (data.result[key] !== undefined) {
-                        expenseData[key] = parseFloat(data.result[key]);
-                    }
-                });
-    
-                const totalIncome = parseFloat(data.result['income']) || 0;
-                const totalExpense = -Object.values(expenseData).reduce((sum, value) => sum + value, 0);
-    
-                document.getElementById('total-income').textContent = totalIncome.toLocaleString();
-                document.getElementById('total-expense').textContent = totalExpense.toLocaleString();
-    
-                // 更新圖表資料
-                const ctx = document.getElementById('expenseChart').getContext('2d');
-                const chartData = {
-                    labels: ['食', '衣', '住', '行', '育', '樂'],
-                    datasets: [{
-                        data: Object.values(expenseData),
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#EB8C00'],
-                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#EB8C00']
-                    }]
-                };
-    
-                const chartOptions = {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    const total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
-                                    const value = tooltipItem.raw;
-                                    const percentage = ((value / total) * 100).toFixed(2);
-                                    return `${tooltipItem.label}: ${value} 元 (${percentage}%)`;
-                                }
-                            }
-                        },
-                    
-                        datalabels: {
-                            color: '#fff', 
-                            font: {
-                                size: 16, 
-                                weight: 'bold'
-                            },
-                            formatter: (value, ctx) => {
-                                const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(2);
-                                return `${percentage}%`; 
-                            }
-                        }
-                    }
-                };
-    
-            new Chart(document.getElementById('expenseChart'), {
-                    type: 'pie', 
-                    data: chartData, 
-                    options: chartOptions,
-                    plugins: [ChartDataLabels] // 啟用 DataLabels 插件
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
+            window.location.href = "main.html";
+        }
+
+        const currentYear = new Date().getFullYear();
+        let selectedMonth = `${currentYear}-01`;
+        const expenseData = { food: 0, clothing: 0, housing: 0, transportation: 0, education: 0, entertainment: 0, outboundRemittance: 0 };
+        const incomeData = { salary: 0, bonus: 0, pocketMoney: 0, investment: 0, inboundRemittance: 0 };
+
+        const incomeChartInstance = new Chart(document.getElementById('incomeChart').getContext('2d'), {
+            type: 'pie',
+            data: { labels: ['薪水', '獎金', '零用錢', '投資獲利', '匯款'], datasets: [{ data: Object.values(incomeData), backgroundColor: ['#4BC0C0', '#9966FF', '#FFCE56', '#FF6384', '#36A2EB'] }] },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
         });
+
+        const expenseChartInstance = new Chart(document.getElementById('expenseChart').getContext('2d'), {
+            type: 'pie',
+            data: { labels: ['食', '衣', '住', '行', '育', '樂', '匯款'], datasets: [{ data: Object.values(expenseData), backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#EB8C00', '#CCCC00'] }] },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+        });
+
+        document.getElementById("month-selector").addEventListener("change", () => {
+            const selectedValue = document.getElementById("month-selector").value;
+            const currentYear = new Date().getFullYear();
+            const monthString = (parseInt(selectedValue) + 1).toString().padStart(2, "0");
+            selectedMonth = `${currentYear}-${monthString}`;
+            fetchData();
+        });
+
+        function fetchData() {
+            const user = sessionStorage.getItem("username");
+            const formData = new URLSearchParams({
+                user: user,
+                time: selectedMonth
+            });
+
+            fetch('../backend/chart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        updateCharts(data.result);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function updateCharts(data) {
+            Object.keys(expenseData).forEach(key => expenseData[key] = parseFloat(data[key] || 0) * (-1));
+            Object.keys(incomeData).forEach(key => incomeData[key] = parseFloat(data[key] || 0));
+
+            incomeChartInstance.data.datasets[0].data = Object.values(incomeData);
+            incomeChartInstance.update();
+
+            expenseChartInstance.data.datasets[0].data = Object.values(expenseData);
+            expenseChartInstance.update();
+        }
+
+        fetchData();
     </script>
-    
 </body>
 
 </html>
