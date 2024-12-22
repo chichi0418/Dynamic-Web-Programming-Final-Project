@@ -30,18 +30,21 @@ fetch("../backend/read_transaction.php", {
 
         const incomeTable = document.createElement('table');
         let headerRow = incomeTable.insertRow();
-        let headers = ['理由', '金額'];
+        let headers = ['原因', '類型', '金額'];
         headers.forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
             headerRow.appendChild(th);
         });
         data.result.forEach(item => {
-            if (item.category === '收入') {
+            if (item.amount > 0) {
                 const row = incomeTable.insertRow();
                 
                 const descriptionCell = row.insertCell();
                 descriptionCell.textContent = item.description;
+
+                const categoryCell = row.insertCell();
+                categoryCell.textContent = item.category;
     
                 const amountCell = row.insertCell();
                 amountCell.textContent = item.amount;
@@ -53,14 +56,14 @@ fetch("../backend/read_transaction.php", {
         
         const expenseTable = document.createElement('table');
         headerRow = expenseTable.insertRow();
-        headers = ['理由', '類型','金額'];
+        headers = ['原因', '類型', '金額'];
         headers.forEach(headerText => {
             const th = document.createElement('th');
             th.textContent = headerText;
             headerRow.appendChild(th);
         });
         data.result.forEach(item => {
-            if (item.category !== '收入') {
+            if (item.amount <= 0) {
                 const row = expenseTable.insertRow();
                 
                 const descriptionCell = row.insertCell();

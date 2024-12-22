@@ -59,12 +59,9 @@
     $user_id = $result['id'];
     
     
-    $query = "SELECT `t`.`amount`, `t`.`description`, `t`.`category`, `a`.`name` AS `account`, `t`.`time`, `tu`.`username` AS `to_user`, `ta`.`name` AS `to_account`
-                FROM `transactions` `t`
-                LEFT JOIN `accounts` `a` ON `t`.`account` = `a`.`id`
-                LEFT JOIN `users` `tu` ON `t`.`to_user` = `tu`.`id`
-                LEFT JOIN `accounts` `ta` ON `t`.`to_account` = `ta`.`id`
-                WHERE `t`.`time` = :time AND `t`.`user` = :user_id";
+    $query = "SELECT `amount`, `description`, `category`
+                FROM `transactions`
+                WHERE `time` = :time AND `user` = :user_id";
 
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':time', $datetime, PDO::PARAM_STR);

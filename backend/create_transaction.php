@@ -9,8 +9,9 @@
         "user"
         "account"
         "time"
-        "to_user"
-        "to_account"
+        "to_user" (for transfer)
+        "to_account" (for transfer)
+        "password" (for transfer)
 
         To frontend (Content-Type: application/json):
         [
@@ -116,9 +117,11 @@
             exit;
         }
         $to_user_id = $result['id'];
+
+        // Verify user password
         $query = "SELECT `password` FROM `users` WHERE `username` = :username";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':username', $to_user, PDO::PARAM_STR);
+        $stmt->bindParam(':username', $user, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
@@ -221,7 +224,22 @@
 
             // Update destination account balance
             if ($to_account_id !== null) {
-                $query = "UPDATE `accounts` SET `balance` = `balance` - :amount WHERE `id` = :account_id";
+                $amount *= -1;
+                $query = "INSERT INTO `transactions` 
+                  (`description`, `amount`, `category`, `user`, `account`, `time`, `to_user`, `to_account`) 
+                  VALUES (:description, :amount, :category, :user, :account, :time, :to_user, :to_account)";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+                $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);
+                $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+                $stmt->bindParam(':user', $to_user_id, PDO::PARAM_INT);
+                $stmt->bindParam(':account', $to_account_id, PDO::PARAM_INT);
+                $stmt->bindParam(':time', $datetime, PDO::PARAM_STR);
+                $stmt->bindParam(':to_user', $to_user_id, PDO::PARAM_NULL);
+                $stmt->bindParam(':to_account', $to_account_id, PDO::PARAM_NULL);
+                $stmt->execute();
+                
+                $query = "UPDATE `accounts` SET `balance` = `balance` + :amount WHERE `id` = :account_id";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);
                 $stmt->bindParam(':account_id', $to_account_id, PDO::PARAM_INT);

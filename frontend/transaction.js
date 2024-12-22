@@ -3,8 +3,6 @@ function createTransaction(event) {
 
     const user = sessionStorage.getItem("username");
     const account = sessionStorage.getItem("username");
-    console.log("User:", user);
-    console.log("Account:", account);
     let amount_ = document.getElementById("amount").value;
     const description = document.getElementById("reason").value;
     const type = document.getElementById("type").value;
@@ -78,17 +76,21 @@ function createTransaction(event) {
     })
 }
 
-function confirmTransfer() {
+function confirmTransfer(event) {
+    event.preventDefault();
+
     const confirmation = confirm("是否確定匯款？");
     if (confirmation) {
-        const amount = document.getElementById("amount").value;
+        const user = sessionStorage.getItem("username");
+        const account = sessionStorage.getItem("username");
+        const amount = -document.getElementById("amount").value;
         const password = document.getElementById("payer-password").value;
         const to_user = document.getElementById("recipient-account").value;
         const to_account = document.getElementById("recipient-account").value;
-        const description = "";
+        const description = document.getElementById("description").value;
         const category = "匯款";
     
-        if (!amount || !password || !to_user || !to_account) {
+        if (!amount || !password || !to_user || !to_account || !description) {
             alert("請填寫完整資訊!");
             return;
         }
@@ -101,6 +103,8 @@ function confirmTransfer() {
         const time = `${year}-${month}-${day} 00:00:00`;
     
         const formData = new URLSearchParams({
+            user: user,
+            account: account,
             amount: amount,
             password: password,
             to_user: to_user,
@@ -128,11 +132,13 @@ function confirmTransfer() {
                 if (data.message == "密碼錯誤！") {
                     alert("密碼錯誤！");
                 } else {
+                    console.log(data.message);
                     alert("匯款失敗，請再試一次！");
                 }                
             }
         })
         .catch(error => {
+            console.log(error);
             alert("匯款失敗，請再試一次！");
         })
     } else {

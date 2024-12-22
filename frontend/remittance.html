@@ -154,7 +154,7 @@
     }
     </style>
     <script src="./auth.js"></script>
-    <script src="./transfer.js"></script>
+    <script src="./transaction.js"></script>
 </head>
 
 <body>
@@ -167,18 +167,22 @@
     </div>
 
     <div class="main-container">   
-        <div class="container">
+        <form class="container" onsubmit="confirmTransfer(event)">
             <h2 class="title">匯款人資訊</h2>
             <div class="form-group">
                 <label for="amount">匯款金額</label>
                 <input type="number" id="amount" placeholder="請輸入匯款金額" required>
             </div>
             <div class="form-group">
+                <label for="description">匯款原因</label>
+                <input type="text" id="description" placeholder="請輸入匯款原因" required>
+            </div>
+            <div class="form-group">
                 <label for="payer-password">匯款人密碼</label>
                 <input type="password" id="payer-password" placeholder="請輸入匯款人密碼" required>
             </div>
-            <button type="button" class="btn" onclick="confirmTransfer()">匯款</button>
-        </div>
+            <button type="submit" class="btn">匯款</button>
+        </form>
 
        
         <div>
