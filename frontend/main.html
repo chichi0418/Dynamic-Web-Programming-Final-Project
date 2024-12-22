@@ -58,6 +58,7 @@
         #balance-display {
             font-size: 16px;
             color: #333;
+            margin-top: 10PX;
             margin-right: 20px;
             font-weight: bold;
         }
@@ -355,9 +356,16 @@
 <body>
     <div class="navbar">
         <div class="navbar-logo">記帳小幫手</div>
-        <div class="navbar-menu">
-            <span id="balance-display">餘額: 0</span>
-            <button class="logout-btn" onclick="logout()">登出</button>
+            <div class="navbar-menu">
+                
+                <!-- <a class="menu-item" href="circumstance.html">收支紀錄</a>
+                <a class="menu-item" href="exchange.html">查看匯率</a>
+                <a class="menu-item" href="remittance.html">匯款轉帳</a>
+                <a class="menu-item" href="chart.html">分析圖表</a>
+                <a class="menu-item" href="stock.html">股票查詢</a>
+                <span id="username">歡迎！</span> -->
+                <span id="balance-display">餘額: 0</span>
+                <button class="logout-btn" onclick="logout()">登出</button>
         </div>
     </div>
 
@@ -555,7 +563,7 @@
                 });
                 const data = await response.json();
                 if (data.status === 'success') {
-                    document.getElementById('balance-display').textContent = `餘額: ${data.balance}`;
+                    document.getElementById('balance-display').textContent = `總淨資產: ${data.balance}`;
                 } else {
                     console.error('Error fetching balance:', data.message);
                 }
