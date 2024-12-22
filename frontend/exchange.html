@@ -41,6 +41,42 @@
             color: #d9252c; 
         }
 
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* 導覽項目靠右排列 */
+            gap: 15px; /* 導覽項目之間的間距 */
+        }
+
+        .menu-item {
+            text-decoration: none; /* 移除下劃線 */
+            color: #666666; /* 預設字體顏色 */
+            font-size: 16px; /* 字體大小 */
+            font-weight: bold;
+            padding: 5px 10px; /* 增加內部填充 */
+            transition: color 0.3s, background-color 0.3s; /* 添加過渡效果 */
+        }
+
+        .menu-item:hover {
+            color: #d9252c; /* 滑鼠懸停時變色 */
+            background-color: rgba(217, 37, 44, 0.1); /* 背景加淡色效果 */
+            border-radius: 5px; /* 添加圓角 */
+        }
+
+        #username {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333; /* 字體顏色 */
+            margin-right: 10px; /* 與餘額保持間距 */
+        }
+
+        #balance-display {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333; /* 字體顏色 */
+            margin-right: 15px; /* 與按鈕保持間距 */
+        }
+
         .converter-container {
             width: 60%;
             max-width: 800px;
@@ -176,10 +212,15 @@
 <body>
 
     <div class="navbar">
-        <div class="navbar-logo">記帳小幫手</div>  
+        <div class="navbar-logo">記帳小幫手</div> 
         <div class="navbar-menu">
+            <a class="menu-item" href="circumstance.html">收支紀錄</a>
+            <a class="menu-item" href="exchange.html">查看匯率</a>
+            <a class="menu-item" href="remittance.html">匯款轉帳</a>
+            <a class="menu-item" href="chart.html">分析圖表</a>
+            <a class="menu-item" href="stock.html">股票查詢</a>
             <button class="logout-btn" onclick="main()">回主頁</button>
-        </div> 
+        </div>  
     </div>
 
     <div class="converter-container">
