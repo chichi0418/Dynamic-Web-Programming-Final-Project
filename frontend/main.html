@@ -387,9 +387,9 @@
             </div>
             <div class="calendar">
                 <div id="calendar-header" class="calendar-header">
-                    <button class="arrow-btn" id="prevMonth">&lt;</button>
+                    <button class="arrow-btn" id="prevMonth">&nbsp;◀</button>
                     <span id="calendarTitle">點選日期查看收支情況</span>
-                    <button class="arrow-btn" id="nextMonth">&gt;</button>
+                    <button class="arrow-btn" id="nextMonth">▶&nbsp;</button>
                 </div>
                 <div class="calendar-days">
                     <div>日</div>
@@ -471,7 +471,7 @@
                 "七月", "八月", "九月", "十月", "十一月", "十二月"
             ];
 
-            calendarTitle.textContent = `點選日期查看2024 ${monthNames[month]} 收支情況`;
+            calendarTitle.textContent = `點選日期查看 2024 ${monthNames[month]} 收支情況`;
 
             calendarBody.innerHTML = "";
 

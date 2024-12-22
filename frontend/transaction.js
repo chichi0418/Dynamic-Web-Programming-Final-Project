@@ -31,7 +31,21 @@ function createTransaction(event) {
         }
         amount_ *= -1;
     } else if (type === "income") {
-        category_ = "收入";
+        const categoryValue = document.querySelector('input[name="category"]:checked')?.value;
+        switch (categoryValue) {
+            case 'salary':
+                category_ = "薪水";
+                break;
+            case 'bonus':
+                category_ = "獎金";
+                break;
+            case 'pocketMoney':
+                category_ = "零用錢";
+                break;
+            case 'investment':
+                category_ = "投資獲利";
+                break;
+        }
     }
     const amount = amount_;
     const category = category_;
