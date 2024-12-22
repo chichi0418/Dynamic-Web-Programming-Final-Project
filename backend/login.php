@@ -12,8 +12,6 @@
             "message": (string),
         ]
     */
-
-    session_start();
     
     header('Content-Type: application/json; charset=UTF-8');
 
@@ -39,10 +37,6 @@
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($result) {
         if (password_verify($password, $result['password'])) {
-            $_SESSION['loggedin'] = true;
-            $_SESSION['username'] = $username;
-            $_SESSION['user_id'] = $result['id'];
-
             http_response_code(200);
             echo json_encode([
                 "status" => "success",

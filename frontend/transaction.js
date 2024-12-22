@@ -1,6 +1,10 @@
 function createTransaction(event) {
     event.preventDefault();
 
+    const user = sessionStorage.getItem("username");
+    const account = sessionStorage.getItem("username");
+    console.log("User:", user);
+    console.log("Account:", account);
     let amount_ = document.getElementById("amount").value;
     const description = document.getElementById("reason").value;
     const type = document.getElementById("type").value;
@@ -45,6 +49,8 @@ function createTransaction(event) {
         amount: amount,
         category: category,
         time: time,
+        user: user,
+        account: account,
     });
 
     fetch("../backend/create_transaction.php", {
@@ -62,10 +68,12 @@ function createTransaction(event) {
             alert("新增成功！");
             window.location.href = "./main.html";
         } else {
+            console.log(data.message);
             alert("新增失敗，請再試一次！");
         }
     })
     .catch(error => {
+        console.log(error);
         alert("新增失敗，請再試一次！");
     })
 }

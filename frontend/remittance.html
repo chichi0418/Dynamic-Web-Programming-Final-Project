@@ -22,6 +22,25 @@
             padding: 20px;
         }
 
+        .navbar {
+            background-color: #ffffff; 
+            border-bottom: 2px solid #e6e6e6; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .navbar-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d9252c; 
+        }
+
         .main-container {
             display: flex;
             justify-content: space-between;
@@ -109,14 +128,45 @@
                 transform: translateY(-10px);
             }
         }
+
+        .logout-btn {
+        background: linear-gradient(to right, #d9252c, #b71b21);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;   
+    }
+
+    .logout-btn:hover {
+        background: linear-gradient(to right, #b71b21, #d9252c);
+        transform: scale(1.05);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .logout-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
     </style>
-    <script src="./transaction.js"></script>
+    <script src="./auth.js"></script>
+    <script src="./transfer.js"></script>
 </head>
 
 <body>
-    <div class="main-container">
-        
-        
+
+    <div class="navbar">
+        <div class="navbar-logo">記帳小幫手</div>  
+        <div class="navbar-menu">
+            <button class="logout-btn" onclick="main()">回主頁</button>
+        </div> 
+    </div>
+
+    <div class="main-container">   
         <div class="container">
             <h2 class="title">匯款人資訊</h2>
             <div class="form-group">
@@ -135,7 +185,6 @@
             <img src="./images/remittance.jpg" alt="匯款圖片" class="middle-image">
         </div>
 
-        
         <div class="container">
             <h2 class="title">收款人資訊</h2>
             <div class="form-group">
@@ -144,7 +193,13 @@
             </div>
         </div>
         
-    </div>    
+    </div>
+    
+    <script>
+        function main() {
+                window.location.href = "main.html";
+            }
+    </script>
 </body>
 
 </html>

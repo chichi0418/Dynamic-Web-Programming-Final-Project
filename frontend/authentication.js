@@ -106,6 +106,8 @@ function login(event) {
     .then(data => {
         if (data.status === "success") {
             message.innerHTML = "登入成功！";
+            sessionStorage.setItem("username", username);
+            console.log(sessionStorage.getItem("username"));
             // 等 0.8 秒後跳進系統主頁面
             setTimeout(() => {
                 window.location.href = "main.html"; // 跳轉到 main.html
@@ -115,6 +117,7 @@ function login(event) {
         }
     })
     .catch(error => {
-        message.innerHTML = "登入失敗，請再試一次！"
+        console.log(error);
+        message.innerHTML = "登入失敗，請再試一次！";
     })
 }

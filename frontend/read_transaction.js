@@ -7,7 +7,10 @@ day = day.padStart(2, '0');
 
 const time = `2024-${month}-${day} 00:00:00`;
 
+const user = sessionStorage.getItem("username");
+
 const formData = new URLSearchParams({
+    user: user,
     time: time,
 });
 

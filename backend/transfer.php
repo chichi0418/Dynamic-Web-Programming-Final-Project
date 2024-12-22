@@ -29,8 +29,8 @@
     $description = $_POST['description'] ?? null;
     $amount = isset($_POST['amount']) ? (int)$_POST['amount'] : null;
     $category = $_POST['category'] ?? null;
-    $user = $_POST['user'] ?? null;
-    $account = $_POST['account'] ?? null;
+    $user = $_SESSION['username'] ?? null;
+    $account = $_SESSION['username'] ?? null;
     $time = $_POST['time'] ?? null;
     $to_user = $_POST['to_user'] ?? null;
     $to_account = $_POST['to_account'] ?? null;

@@ -19,7 +19,7 @@
     
     require_once './connection.php';
 
-    $user = $_SESSION['username'] ?? null;
+    $user = $_POST['user'] ?? null;
     $time = $_POST['time'] ?? null;
 
     $datetime = date('Y-m-d H:i:s', strtotime($time));
