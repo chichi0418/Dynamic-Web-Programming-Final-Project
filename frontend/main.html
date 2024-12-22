@@ -489,14 +489,15 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDate = `2024-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const total = dailyTotalsMap[dayDate] || 0;
+                // const total = 1000;
                 console.log(`Date: ${dayDate}, Total: ${total}`); // 調試輸出
 
                 const dayCell = document.createElement("div");
                 dayCell.classList.add("day");
 
-                if (total > budget) {
+                if (-total > budget) {
                     dayCell.classList.add("red");
-                } else if (total > 0) {
+                } else if (-total > 0) {
                     dayCell.classList.add("green");
                 }
 

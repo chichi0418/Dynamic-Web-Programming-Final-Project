@@ -24,7 +24,7 @@
         http_response_code(500);
         echo json_encode([
             "status" => "error",
-            "message" => "資料庫連線失敗！",
+            "message" => "資料庫連線失敗！s",
         ]);
         exit;
     }

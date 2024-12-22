@@ -1,4 +1,8 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 /*
     HTTP request method: POST
 
@@ -28,6 +32,15 @@ $user = $_POST['user'] ?? null;
 $time = $_POST['time'] ?? null;
 $start_date = $time . '-01';
 $end_date = date('Y-m-d', strtotime('+1 month', strtotime($start_date)));
+
+if (!isset($_POST['user']) || !isset($_POST['time'])) {
+    http_response_code(400);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Missing required parameters: user or time"
+    ]);
+    exit;
+}
 
 if (!preg_match('/^\d{4}-\d{2}$/', $time)) {
     http_response_code(400);
