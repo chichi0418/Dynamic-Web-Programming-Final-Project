@@ -55,6 +55,13 @@
             color: #d9252c; 
         }
 
+        #balance-display {
+            font-size: 16px;
+            color: #333;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
         .navbar-menu {
             display: flex;
             gap: 20px;
@@ -349,6 +356,7 @@
     <div class="navbar">
         <div class="navbar-logo">記帳小幫手</div>
         <div class="navbar-menu">
+            <span id="balance-display">餘額: 0</span>
             <button class="logout-btn" onclick="logout()">登出</button>
         </div>
     </div>
@@ -537,6 +545,24 @@
                 budgetDisplay.textContent = `預算: ${budget}`;
             }
         }
+        
+        async function fetchBalance(username) {
+            try {
+                const response = await fetch('../backend/fetch_balance.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    document.getElementById('balance-display').textContent = `餘額: ${data.balance}`;
+                } else {
+                    console.error('Error fetching balance:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+            }
+        }
 
         window.onload = () => {
             const username = sessionStorage.getItem("username");
@@ -544,6 +570,7 @@
                 alert("請先登入");
                 window.location.href = "login.html";
             }
+            fetchBalance(username); // 獲取餘額
             generateCalendar(currentMonth);
         };
     </script>
